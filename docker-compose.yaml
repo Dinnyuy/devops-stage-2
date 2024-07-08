@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    networks:
+      - web
+
+  backend:
+    build: ./backend
+    networks:
+      - web
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - web
+
+volumes:
+  postgres-data:
+
+networks:
+  web:
+    external: true
