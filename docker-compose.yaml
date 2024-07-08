@@ -7,7 +7,7 @@ services:
     container_name: frontend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.rule=Host(`18.204.14.168`)"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
     environment:
       - NODE_ENV=production
@@ -18,7 +18,7 @@ services:
     container_name: backend
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/api`, `/docs`, `/redoc`)"
+      - "traefik.http.routers.backend.rule=Host(`18.204.14.168`) && PathPrefix(`/api`, `/docs`, `/redoc`)"
       - "traefik.http.services.backend.loadbalancer.server.port=8000"
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/database
@@ -36,7 +36,7 @@ services:
     container_name: adminer
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.adminer.rule=Host(`localhost`) && PathPrefix(`/adminer`)"
+      - "traefik.http.routers.adminer.rule=Host(`db1.jumpingcrab.com`)"
       - "traefik.http.services.adminer.loadbalancer.server.port=8080"
     ports:
       - "8081:8080"
@@ -51,5 +51,9 @@ services:
     ports:
       - "80:80"
       - "8090:8090"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`proxy1.jumpingcrab.com`)"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+
